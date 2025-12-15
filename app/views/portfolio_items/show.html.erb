@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @portfolio_item %>
+
+<div>
+  <%= link_to "Edit this portfolio item", edit_portfolio_item_path(@portfolio_item) %> |
+  <%= link_to "Back to portfolio items", portfolio_items_path %>
+
+  <%= button_to "Destroy this portfolio item", @portfolio_item, method: :delete %>
+</div>

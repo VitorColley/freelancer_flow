@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @user_skill %>
+
+<div>
+  <%= link_to "Edit this user skill", edit_user_skill_path(@user_skill) %> |
+  <%= link_to "Back to user skills", user_skills_path %>
+
+  <%= button_to "Destroy this user skill", @user_skill, method: :delete %>
+</div>

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  budget: 9.99
+  status: MyString
+  client: one
+
+two:
+  title: MyString
+  description: MyText
+  budget: 9.99
+  status: MyString
+  client: two

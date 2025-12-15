@@ -1,0 +1,11 @@
+<% content_for :title, "New portfolio item" %>
+
+<h1>New portfolio item</h1>
+
+<%= render "form", portfolio_item: @portfolio_item %>
+
+<br>
+
+<div>
+  <%= link_to "Back to portfolio items", portfolio_items_path %>
+</div>
