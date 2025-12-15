@@ -1,24 +1,21 @@
 # README
+# Freelance Flow
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Freelance Flow is a Ruby on Rails 8 web application developed as an academic project.
 
-Things you may want to cover:
+## Overview
+A freelance marketplace platform where:
+- Clients can post projects
+- Freelancers can apply for work
+- Projects can be tracked from proposal to completion
+- Invoices and reviews can be generated
 
-* Ruby version
+## Tech Stack
+- Ruby on Rails 8
+- SQLite3
+- ERB
+- Git & GitHub
 
-* System dependencies
+## Project Status
+🚧 In development
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
