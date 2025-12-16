@@ -5,7 +5,7 @@ class CreateProjects < ActiveRecord::Migration[8.1]
       t.text :description
       t.decimal :budget
       t.string :status
-      t.references :client, null: false, foreign_key: true
+      t.references :client, null: false, foreign_key: {to_table: :users}
 
       t.timestamps
     end

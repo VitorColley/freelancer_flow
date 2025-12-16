@@ -1,15 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  project: one
-  reviewer: one
-  reviewee: one
-  rating: 1
-  comment: MyText
-
-two:
-  project: two
-  reviewer: two
-  reviewee: two
-  rating: 1
-  comment: MyText
+client_review:
+  project: mobile_app_project
+  reviewer: client_one
+  reviewee: freelancer_one
+  rating: 5
+  comment: Excellent work, delivered on time.

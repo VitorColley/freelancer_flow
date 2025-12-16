@@ -1,13 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  project: one
-  amount: 9.99
-  status: MyString
-  issued_at: 2025-12-15 08:18:57
-
-two:
-  project: two
-  amount: 9.99
-  status: MyString
-  issued_at: 2025-12-15 08:18:57
+invoice_one:
+  project: mobile_app_project
+  amount: 5000
+  status: unpaid
+  issued_at: <%= Time.current %>

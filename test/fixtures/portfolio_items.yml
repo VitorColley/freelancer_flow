@@ -1,13 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  freelancer: one
-  title: MyString
-  description: MyText
-  url: MyString
-
-two:
-  freelancer: two
-  title: MyString
-  description: MyText
-  url: MyString
+freelancer_one_portfolio:
+  freelancer: freelancer_one
+  title: Example Application
+  description: Full-stack Rails example application
+  url: https://github.com/example

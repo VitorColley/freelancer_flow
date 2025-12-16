@@ -1,15 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  description: MyText
-  budget: 9.99
-  status: MyString
-  client: one
+website_project:
+  title: Company Website
+  description: Build a website for a small business
+  budget: 1500
+  status: open
+  client: client_one
 
-two:
-  title: MyString
-  description: MyText
-  budget: 9.99
-  status: MyString
-  client: two
+mobile_app_project:
+  title: Mobile App
+  description: Build a mobile app for a startup
+  budget: 5000
+  status: in_progress
+  client: client_one

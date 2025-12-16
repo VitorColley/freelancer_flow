@@ -102,13 +102,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_15_081857) do
   end
 
   add_foreign_key "invoices", "projects"
-  add_foreign_key "portfolio_items", "freelancers"
-  add_foreign_key "projects", "clients"
-  add_foreign_key "proposals", "freelancers"
+  add_foreign_key "portfolio_items", "users", column: "freelancer_id"
+  add_foreign_key "projects", "users", column: "client_id"
   add_foreign_key "proposals", "projects"
+  add_foreign_key "proposals", "users", column: "freelancer_id"
   add_foreign_key "reviews", "projects"
-  add_foreign_key "reviews", "reviewees"
-  add_foreign_key "reviews", "reviewers"
+  add_foreign_key "reviews", "users", column: "reviewee_id"
+  add_foreign_key "reviews", "users", column: "reviewer_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_skills", "skills"
   add_foreign_key "user_skills", "users"

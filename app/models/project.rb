@@ -3,7 +3,7 @@ class Project < ApplicationRecord
 
   has_many :proposals, dependent: :destroy
   has_one :invoice, dependent: :destroy
-  has_many :reviews, dependant: :destroy
+  has_many :reviews, dependent: :destroy
 
   validates :title, presence: true
   validates :description, presence: true

@@ -24,14 +24,13 @@ class User < ApplicationRecord
 
   validates :role, presence: true, inclusion: { in: ROLES }
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :password, 
     length: { minimum: 8, maximun: 64 },
     format: { with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+\z/, 
     message: 'must include at least one uppercase letter, one lowercase letter, one digit, and one special character' 
     },
     allow_nil: true
-
 
   #Helper methods for roles
 
