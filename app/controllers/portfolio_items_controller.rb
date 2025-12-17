@@ -1,4 +1,6 @@
 class PortfolioItemsController < ApplicationController
+  allow_unauthenticated_access only: %i[index show]
+
   before_action :set_portfolio_item, only: %i[ show edit update destroy ]
   # Only freelancers can create
   before_action :require_freelancer
@@ -25,7 +27,7 @@ class PortfolioItemsController < ApplicationController
 
   # POST /portfolio_items or /portfolio_items.json
   def create
-    @portfolio_item = PortfolioItem.new(portfolio_item_params)
+    @portfolio_item = current_user.portfolio_items.build(portfolio_item_params)
 
     respond_to do |format|
       if @portfolio_item.save
@@ -77,6 +79,6 @@ class PortfolioItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def portfolio_item_params
-      params.expect(portfolio_item: [ :freelancer_id, :title, :description, :url ])
+      params.expect(portfolio_item: [ :title, :description, :url ])
     end
 end

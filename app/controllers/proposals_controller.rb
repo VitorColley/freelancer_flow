@@ -26,6 +26,7 @@ class ProposalsController < ApplicationController
   # POST /proposals or /proposals.json
   def create
     @proposal = current_user.proposals.build(proposal_params)
+    @proposal.project = @project
 
     respond_to do |format|
       if @proposal.save
@@ -66,12 +67,6 @@ class ProposalsController < ApplicationController
     def set_proposal
       @proposal = Proposal.find(params.expect(:id))
     end
-    
-    # Only allow freelancers to create proposals
-    def require_freelancer
-      return if current_user&.freelancer?
-      redirect_to root_path, alert: "Only freelancers can apply for projects."
-    end
 
     # Only allow the Owner to edit/delete
     def authorize_proposal_owner
@@ -83,6 +78,6 @@ class ProposalsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def proposal_params
-      params.expect(proposal: [ :project_id, :freelancer_id, :message, :bid_amount, :status ])
+      params.expect(proposal: [:message, :bid_amount])
     end
 end

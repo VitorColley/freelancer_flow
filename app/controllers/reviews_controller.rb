@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  allow_unauthenticated_access only: %i[index show]
   before_action :set_review, only: %i[ show edit update destroy ]
   #authorises user to create a review
   before_action :authorise_review_creation, only: %i[ new create ]
@@ -26,7 +27,8 @@ class ReviewsController < ApplicationController
 
   # POST /reviews or /reviews.json
   def create
-    @review = Review.new(review_params)
+    @review = current_user.reviews_written.build(review_params)
+    @review.project = @project
 
     respond_to do |format|
       if @review.save
@@ -101,6 +103,6 @@ class ReviewsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def review_params
-      params.expect(review: [ :project_id, :reviewer_id, :reviewee_id, :rating, :comment ])
+      params.expect(review: [ :rating, :comment ])
     end
 end

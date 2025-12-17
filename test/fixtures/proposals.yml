@@ -13,3 +13,11 @@ proposal_two:
   message: I can deliver this project quickly and efficiently.
   bid_amount: 1300
   status: pending
+
+accepted_mobile_app_proposal:
+  project: mobile_app_project
+  freelancer: freelancer_one
+  message: Accepted proposal for invoicing
+  bid_amount: 5000
+  status: accepted
+

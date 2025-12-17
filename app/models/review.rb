@@ -5,4 +5,6 @@ class Review < ApplicationRecord
 
   validates :rating, inclusion: { in: 1..5 }
   validates :comment, presence: true
+   # Checks if a review has already been created by that user
+  validates :project_id, uniqueness: { scope: :reviewer_id }
 end

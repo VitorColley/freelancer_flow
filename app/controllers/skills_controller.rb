@@ -1,4 +1,6 @@
 class SkillsController < ApplicationController
+  allow_unauthenticated_access only: %i[index show]
+  before_action :require_authentication, only: %i[new create]
   before_action :set_skill, only: %i[ show edit update destroy ]
 
   # GET /skills or /skills.json

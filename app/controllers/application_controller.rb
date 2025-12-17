@@ -16,6 +16,15 @@ class ApplicationController < ActionController::Base
   private
 
     def current_user
-      Current.session&.user_skills
+      Current.session&.user
+    end
+
+    # Only allows freelancers to execute certain actions
+    def require_freelancer
+      return if current_user&.freelancer?
+      redirect_back(
+        fallback_location: projects_path,
+        alert: "Only freelancers can perform this action."
+      )
     end
 end

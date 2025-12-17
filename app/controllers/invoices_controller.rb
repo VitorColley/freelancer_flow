@@ -25,7 +25,8 @@ class InvoicesController < ApplicationController
 
   # POST /invoices or /invoices.json
   def create
-    @invoice = Invoice.new(invoice_params)
+    @project = Project.find(params[:invoice][:project_id])
+    @invoice = @project.build_invoice(invoice_params)
 
     respond_to do |format|
       if @invoice.save
@@ -42,7 +43,7 @@ class InvoicesController < ApplicationController
   def update
     respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: "Invoice was successfully updated.", status: :see_other }
+        format.html { redirect_to @invoice.project, notice: "Invoice was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -56,7 +57,7 @@ class InvoicesController < ApplicationController
     @invoice.destroy!
 
     respond_to do |format|
-      format.html { redirect_to invoices_path, notice: "Invoice was successfully destroyed.", status: :see_other }
+      format.html { redirect_to project_path(@invoice.project), notice: "Invoice was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -69,26 +70,19 @@ class InvoicesController < ApplicationController
 
     # Only the freelancer can create the invoice
     def authorise_invoice_creation
-      accepted_proposal = @project.proposals.find_by(status: "accepted")
-      # Checks the freelancer
-      unless accepted_proposal&.freelancer == current_user
-        redirect_to @project, alert: "Only the assigned freelancer can create the invoice."
-        return
-      end
-      # Checks the project status
-      unless @project.status == "completed"
-        redirect_to @project, alert: "Invoices can only be created for completed projects."
-        return
-      end
-      # Checks if there is an invoice already
-      if @project.invoice.present?
-        redirect_to @project, alert: "An invoice already exists for this project."
-        return
+      project_id =
+        params[:project_id] ||
+        params.dig(:invoice, :project_id)
+
+      project = Project.find(project_id)
+
+      unless project.proposals.exists?(freelancer_id: current_user.id, status: "accepted")
+        redirect_to projects_path, alert: "You are not allowed to invoice for this project."
       end
     end
     
     # Only the people involved in the project can edit/delete
-    def authorize_invoice_owner
+    def authorise_invoice_owner
       project = @invoice.project
 
       # Gets freelancer
@@ -103,6 +97,6 @@ class InvoicesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def invoice_params
-      params.expect(invoice: [ :project_id, :amount, :status, :issued_at ])
+      params.expect(invoice: [ :amount, :status ])
     end
 end
