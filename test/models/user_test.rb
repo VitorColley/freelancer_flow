@@ -53,4 +53,14 @@ class UserTest < ActiveSupport::TestCase
     assert users(:freelancer_one).freelancer?
     assert users(:admin).admin?
   end
+
+  test "default role" do
+    user = User.new(
+      name: "default",
+      email_address: "default@example.com",
+      password: "Password1234!"
+    )
+    
+    assert_equal("client", user.role)
+  end
 end
