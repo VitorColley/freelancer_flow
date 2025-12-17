@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: %i[ show edit update destroy ]
+  #Makes sure only clients can manage Projects
   before_action :require_client, only: %i[ new create edit update destroy ]
+  #Ensures only the owner can edit/delete
+  before_action :authorize_project_owner, only: %i[edit update destroy]
 
   # GET /projects or /projects.json
   def index
@@ -69,6 +72,13 @@ class ProjectsController < ApplicationController
       return if current_user&.client?
 
       redirect_to projects_path, alert: "Only clients can manage projects."
+    end
+
+    #Only allows the owner to edit/delete
+    def authorize_project_owner
+      return if @project.client == current_user || current_user.admin?
+
+      redirect_to projects_path, alert: "You are not authorised to modify this project."
     end
 
     # Only allow a list of trusted parameters through.

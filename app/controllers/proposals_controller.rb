@@ -1,6 +1,9 @@
 class ProposalsController < ApplicationController
   before_action :set_proposal, only: %i[ show edit update destroy ]
+  #Ensures only freelancers can manage proposals
   before_action :require_freelancer, only: %i[ new create]
+  #Ensures only the owner can edit/delete
+  before_action :authorize_proposal_owner, only: %i[edit update destroy]
 
   # GET /proposals or /proposals.json
   def index
@@ -68,6 +71,14 @@ class ProposalsController < ApplicationController
     def require_freelancer
       return if current_user&.freelancer?
       redirect_to root_path, alert: "Only freelancers can apply for projects."
+    end
+
+    # Only allow the Owner to edit/delete
+    def authorize_proposal_owner
+      return if @proposal.freelancer == current_user || current_user&.admin?
+
+      redirect_to project_path(@proposal.project),
+                  alert: "You are not authorised to modify this proposal."
     end
 
     # Only allow a list of trusted parameters through.

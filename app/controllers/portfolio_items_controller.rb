@@ -1,6 +1,9 @@
 class PortfolioItemsController < ApplicationController
   before_action :set_portfolio_item, only: %i[ show edit update destroy ]
+  # Only freelancers can create
   before_action :require_freelancer
+  # Only owner can edit/delete
+  before_action :authorize_portfolio_owner, only: %i[edit update destroy]
 
   # GET /portfolio_items or /portfolio_items.json
   def index
@@ -62,6 +65,14 @@ class PortfolioItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_portfolio_item
       @portfolio_item = PortfolioItem.find(params.expect(:id))
+    end
+
+    # Only owner can edit/delete
+    def authorize_portfolio_owner
+      return if @portfolio_item.freelancer == current_user || current_user&.admin?
+
+      redirect_to portfolio_items_path,
+                  alert: "You are not authorised to modify this portfolio item."
     end
 
     # Only allow a list of trusted parameters through.

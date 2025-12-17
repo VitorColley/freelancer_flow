@@ -11,12 +11,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, alert: "You must be an admin to access this section."
   end
 
+  helper_method :current_user
+
   private
 
     def current_user
       Current.session&.user_skills
     end
-
-  helper_method :current_user
-
 end

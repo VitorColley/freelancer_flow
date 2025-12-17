@@ -9,4 +9,6 @@ class Project < ApplicationRecord
   validates :description, presence: true
   validates :budget, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :status, presence: true, inclusion: { in: %w[open in_progress completed cancelled] }
+  # Checks if a review has already been created by that user
+  validates :project_id, uniqueness: { scope: :reviewer_id }
 end

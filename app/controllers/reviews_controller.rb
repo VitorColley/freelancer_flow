@@ -1,6 +1,10 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: %i[ show edit update destroy ]
-  before_action :authorise_review, only: %i[ edit update destroy ]
+  #authorises user to create a review
+  before_action :authorise_review_creation, only: %i[ new create ]
+  #authorises the owner of the review to modify it
+  before_action :authorize_owner, only: %i[edit update destroy]
+
 
   # GET /reviews or /reviews.json
   def index
@@ -64,11 +68,35 @@ class ReviewsController < ApplicationController
       @review = Review.find(params.expect(:id))
     end
 
-    def authorise_review
+    # Only authorises the owner of the project or the freelancer who was involved to create a review
+    def authorise_review_creation
       project = Project.find(params[:project_id])
-      unless project.client==current_user||project.proposals.exists?(freelancer_id: current_user.id)
-        redirect_to root_path, alert: "You are not allowed to review this project."
+      
+      #Check if the review is completed
+      unless project.status == "completed"
+        redirect_to project, alert: "Reviews can only be left on completed projects."
+        return
       end
+
+      #Check client
+      return if project.client == current_user
+
+      accepted_proposal = project.proposals.find_by(
+        freelancer: current_user,
+        status: "accepted"
+      )
+
+      # Check freelancer
+      return if accepted_proposal
+
+      redirect_to root_path, alert: "You are not allowed to review this project."
+    end
+
+    # Only allow the creator to edit/delete
+    def authorize_owner
+      return if @review.reviewer == current_user || current_user.admin?
+
+      redirect_to @review.project, alert: "You are not authorised to modify this review."
     end
 
     # Only allow a list of trusted parameters through.

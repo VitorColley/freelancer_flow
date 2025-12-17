@@ -1,8 +1,9 @@
 require "test_helper"
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
+  # Tests created by the rails scaffolding
   setup do
-    @project = projects(:one)
+    @project = projects(:mobile_app_project)
   end
 
   test "should get index" do
