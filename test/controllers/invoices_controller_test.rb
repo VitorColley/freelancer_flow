@@ -62,10 +62,10 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "invoice owner can edit invoice" do
-    sign_in_as(@freelancer)
+  test "invoice client can view invoice" do
+    sign_in_as(@invoice.project.client)
 
-    get edit_invoice_url(@invoice)
+    get invoice_url(@invoice)
     assert_response :success
   end
 
