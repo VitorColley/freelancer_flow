@@ -87,4 +87,20 @@ class ProjectsController < ApplicationController
     def project_params
       params.expect(project: [ :title, :description, :budget, :status ])
     end
+
+    # Payment checkout action
+    def checkout
+      # Find the project
+      project = Project.find(params[:id])
+      # Initialize the payment processor
+      processor = Payments::PaymentProcessor.new(project: project)
+      # Create a checkout session
+      session = processor.checkout!
+
+      # Redirect to the payment gateway
+      redirect_to session.url, allow_other_host: true
+    # Handle payment errors
+    rescue Payments::PaymentProcessor::PaymentError => e
+      redirect_to project_path(project), alert: "Checkout failed: #{e.message}"
+    end
 end
