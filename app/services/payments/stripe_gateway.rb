@@ -2,7 +2,8 @@
 module Payments
     class StripeGateway < PaymentGateway
         def create_checkout_session(amount:, metadata:)
-            host = Rails.application.routes.default_url_options[:host]
+            host = Rails.application.routes.default_url_options[:host]||ENV["APP_HOST"]
+            raise "APP_HOST is not set" if host.blank?
 
             Stripe::Checkout::Session.create(
                 payment_method_types: ['card'],
