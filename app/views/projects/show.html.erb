@@ -1,10 +1,112 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @project.title %>
 
-<%= render @project %>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
 
-<div>
-  <%= link_to "Edit this project", edit_project_path(@project) %> |
-  <%= link_to "Back to projects", projects_path %>
+    <!-- Project card -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h1 class="h3 mb-2"><%= @project.title %></h1>
 
-  <%= button_to "Destroy this project", @project, method: :delete %>
+        <p class="text-muted small mb-2">
+          Posted <%= time_ago_in_words(@project.created_at) %> ago
+        </p>
+
+        <p class="mt-3">
+          <%= simple_format(@project.description) %>
+        </p>
+
+        <% if current_user&.freelancer? && @project.status == "open" %>
+          <% if @project.proposals.exists?(freelancer: current_user) %>
+            <div class="alert alert-info mt-3">
+              You have already submitted a proposal for this project.
+            </div>
+          <% else %>
+            <%= link_to "Submit proposal",
+                        new_project_proposal_path(@project),
+                        class: "btn btn-primary mt-3" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Proposals section -->
+    <h5 class="mb-3">Proposals</h5>
+
+    <% if @proposals.any? %>
+      <div class="vstack gap-3">
+        <% @proposals.each do |proposal| %>
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <strong>
+                    <%= proposal.freelancer.name.presence ||
+                        proposal.freelancer.email_address %>
+                  </strong>
+                  <p class="text-muted small mb-1">
+                    Submitted <%= time_ago_in_words(proposal.created_at) %> ago
+                  </p>
+                </div>
+
+                <span class="badge
+                  <%= case proposal.status
+                      when "accepted" then "bg-success"
+                      when "rejected" then "bg-danger"
+                      else "bg-secondary"
+                      end %>">
+                  <%= proposal.status&.capitalize || "Pending" %>
+                </span>
+              </div>
+
+              <p class="mt-3 mb-2">
+                <%= truncate(proposal.message, length: 200) %>
+              </p>
+
+              <div class="d-flex justify-content-end gap-2">
+                <%= link_to "View",
+                            proposal_path(proposal),
+                            class: "btn btn-outline-primary btn-sm" %>
+
+                <% if current_user == @project.client &&
+                      proposal.status == "pending" %>
+                  <%= button_to "Accept",
+                                accept_proposal_path(proposal),
+                                method: :patch,
+                                data: { turbo_confirm: "Accept this proposal?" },
+                                class: "btn btn-success btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        No proposals have been submitted yet.
+      </div>
+    <% end %>
+
+    <% accepted_proposal = @project.proposals.find_by(status: "accepted") %>
+
+    <% if accepted_proposal &&
+          accepted_proposal.freelancer == current_user &&
+          @project.status == "in_progress" %>
+
+      <%= button_to "Mark project as completed",
+                    complete_project_path(@project),
+                    method: :patch,
+                    data: { turbo_confirm: "Confirm project completion?" },
+                    class: "btn btn-success mt-3" %>
+    <% end %>
+
+    <% if @project.status == "completed" && @project.invoice %>
+      <div class="alert alert-success mt-3">
+        Project completed.
+        <%= link_to "View invoice",
+                    invoice_path(@project.invoice),
+                    class: "fw-semibold" %>
+      </div>
+    <% end %>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  allow_unauthenticated_access only: %i[index show]
+  #allow_unauthenticated_access only: %i[index show]
   
   before_action :set_project, only: %i[ show edit update destroy ]
   #Makes sure only clients can manage Projects
@@ -14,6 +14,16 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1 or /projects/1.json
   def show
+    if current_user&.client?
+      # Client can only see proposals for THEIR project
+      authorize_project_owner
+      @proposals = @project.proposals.includes(:freelancer)
+    elsif current_user&.freelancer?
+      # Freelancer only sees their own proposal
+      @proposals = @project.proposals.where(freelancer: current_user)
+    else
+      @proposals = Proposal.none
+    end
   end
 
   # GET /projects/new
@@ -77,6 +87,32 @@ class ProjectsController < ApplicationController
   # Handle payment errors
   rescue Payments::PaymentProcessor::PaymentError => e
     redirect_to project_path(project), alert: "Checkout failed: #{e.message}"
+  end
+
+  # Mark project as complete
+  def complete
+    project = Project.find(params[:id])
+
+    accepted_proposal = project.proposals.find_by(status: "accepted")
+
+    unless accepted_proposal&.freelancer == current_user
+      redirect_to project,
+                  alert: "Only the accepted freelancer can complete this project."
+      return
+    end
+
+    Project.transaction do
+      project.update!(status: "completed")
+
+      # Auto-generate invoice
+      Invoice.create!(
+        project: project,
+        amount: project.budget,
+        status: "unpaid"
+      )
+    end
+
+    redirect_to project, notice: "Project marked as completed. Invoice generated."
   end
 
   private

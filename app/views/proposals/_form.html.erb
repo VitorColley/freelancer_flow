@@ -1,42 +1,50 @@
-<%= form_with(model: proposal) do |form| %>
-  <% if proposal.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(proposal.errors.count, "error") %> prohibited this proposal from being saved:</h2>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <%= form_with(model: proposal, class: "vstack gap-3") do |form| %>
 
-      <ul>
-        <% proposal.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <% if proposal.errors.any? %>
+            <div class="alert alert-danger">
+              <h6 class="alert-heading">
+                <%= pluralize(proposal.errors.count, "error") %> prevented this proposal from being saved:
+              </h6>
+              <ul class="mb-0">
+                <% proposal.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <!-- Project context (read-only, for clarity) -->
+          <div>
+            <label class="form-label">Project</label>
+            <input type="text"
+                   class="form-control"
+                   value="<%= @project.title %>"
+                   disabled>
+          </div>
+
+          <div>
+            <%= form.label :message, "Proposal message", class: "form-label" %>
+            <%= form.textarea :message,
+                  rows: 6,
+                  class: "form-control",
+                  placeholder: "Describe your experience, approach, and timeline…" %>
+          </div>
+
+          <div class="d-flex justify-content-between mt-3">
+            <%= link_to "Cancel",
+                        project_path(@project),
+                        class: "btn btn-link px-0" %>
+
+            <%= form.submit proposal.persisted? ? "Update proposal" : "Submit proposal",
+                  class: "btn btn-primary" %>
+          </div>
+
         <% end %>
-      </ul>
+      </div>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :project_id, style: "display: block" %>
-    <%= form.text_field :project_id %>
   </div>
-
-  <div>
-    <%= form.label :freelancer_id, style: "display: block" %>
-    <%= form.text_field :freelancer_id %>
-  </div>
-
-  <div>
-    <%= form.label :message, style: "display: block" %>
-    <%= form.textarea :message %>
-  </div>
-
-  <div>
-    <%= form.label :bid_amount, style: "display: block" %>
-    <%= form.text_field :bid_amount %>
-  </div>
-
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

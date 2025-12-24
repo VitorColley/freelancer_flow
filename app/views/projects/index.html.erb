@@ -1,16 +1,36 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Projects" %>
 
-<h1>Projects</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Projects</h1>
 
-<div id="projects">
-  <% @projects.each do |project| %>
-    <%= render project %>
-    <p>
-      <%= link_to "Show this project", project %>
-    </p>
+  <% if current_user&.client? %>
+    <%= link_to "New project",
+                new_project_path,
+                class: "btn btn-primary" %>
   <% end %>
 </div>
 
-<%= link_to "New project", new_project_path %>
+<% if @projects.any? %>
+  <div class="row g-3">
+    <% @projects.each do |project| %>
+      <div class="col-md-6 col-lg-4">
+        <%= render "project_card", project: project %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card text-center shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">No projects available</h5>
+      <p class="card-text text-muted">
+        There are currently no projects to display.
+      </p>
+
+      <% if current_user&.client? %>
+        <%= link_to "Post the first project",
+                    new_project_path,
+                    class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

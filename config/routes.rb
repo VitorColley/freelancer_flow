@@ -4,8 +4,18 @@ Rails.application.routes.draw do
   resources :portfolio_items
   resources :user_skills
   resources :skills
-  resources :proposals
-  resources :projects
+  resources :proposals, only: %i[index show edit update destroy] do
+    member do
+      patch :accept
+    end
+  end
+  resources :projects do
+    resources :proposals, only: %i[new create]
+    
+    member do
+      patch :complete
+    end
+  end
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -27,5 +37,18 @@ Rails.application.routes.draw do
   end
 
   root "pages#home"
+  # Payment routes
+  resource :payments, only: [] do
+    get :success
+    get :cancel
+  end
+
+  resources :invoices do
+    member do
+      post :checkout
+    end
+  end
+
+
 
 end
