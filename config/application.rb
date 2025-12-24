@@ -23,7 +23,4 @@ module FreelancerFlow
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.after_initialize do
-      Rails.application.routes.default_url_options[:host] = ENV.fetch("APP_HOST", "freelancerflow-i7ca.onrender.com")
-    end
 end
