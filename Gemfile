@@ -68,3 +68,8 @@ end
 gem "stripe", "~> 18.1"
 
 gem "cssbundling-rails", "~> 1.4"
+
+group :production do
+  gem "pg"
+end
+
