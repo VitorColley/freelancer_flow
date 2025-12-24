@@ -2,7 +2,9 @@
 module Payments
     class StripeGateway < PaymentGateway
         def create_checkout_session(amount:, metadata:)
-            session = Stripe::Checkout::Session.create(
+            host = Rails.application.routes.default_url_options[:host]
+
+            Stripe::Checkout::Session.create(
                 payment_method_types: ['card'],
                 line_items: [{
                     price_data: {
@@ -15,8 +17,8 @@ module Payments
                     quantity: 1,
                 }],
                 mode: 'payment',
-                success_url: Rails.application.routes.url_helpers.success_payments_url + '?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url: Rails.application.routes.url_helpers.cancel_payments_url,
+                success_url: Rails.application.routes.url_helpers.success_payments_url(host: host) + '?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url: Rails.application.routes.url_helpers.cancel_payments_url(host: host),
                 metadata: metadata
             )
             session
