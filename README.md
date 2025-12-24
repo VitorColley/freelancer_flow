@@ -17,5 +17,5 @@ A freelance marketplace platform where:
 - Git & GitHub
 
 ## Project Status
-🚧 In development
+- Production
 
