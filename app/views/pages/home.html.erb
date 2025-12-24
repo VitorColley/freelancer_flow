@@ -1,0 +1,45 @@
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+  <div class="container-fluid py-3">
+    <h1 class="display-6 fw-semibold">Find work. Hire talent. Keep it simple.</h1>
+    <p class="col-md-8 fs-5 text-muted">
+      Freelancer Flow helps clients post projects and freelancers submit proposals — all in one place.
+    </p>
+
+    <div class="d-flex gap-2">
+      <%= link_to "Browse Projects", projects_path, class: "btn btn-primary btn-lg" %>
+      <% unless current_user %>
+        <%= link_to "Create Account", new_user_path, class: "btn btn-outline-secondary btn-lg" rescue nil %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">For Clients</h5>
+        <p class="card-text text-muted">Post a project, review proposals, hire with confidence.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">For Freelancers</h5>
+        <p class="card-text text-muted">Showcase your skills, submit proposals, win gigs.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Secure & Structured</h5>
+        <p class="card-text text-muted">Authentication + role-based actions, built with Rails best practices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+

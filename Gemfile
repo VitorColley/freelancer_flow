@@ -66,3 +66,5 @@ group :test do
 end
 
 gem "stripe", "~> 18.1"
+
+gem "cssbundling-rails", "~> 1.4"

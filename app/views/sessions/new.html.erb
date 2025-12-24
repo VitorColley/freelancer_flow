@@ -1,11 +1,25 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h4 mb-3 text-center">Sign in</h1>
 
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
-  <%= form.submit "Sign in" %>
-<% end %>
-<br>
+        <%= form_with url: session_path, class: "vstack gap-3" do |f| %>
+          <div>
+            <%= f.label :email_address, class: "form-label" %>
+            <%= f.email_field :email_address, class: "form-control", autofocus: true %>
+          </div>
 
-<%= link_to "Forgot password?", new_password_path %>
+          <div>
+            <%= f.label :password, class: "form-label" %>
+            <%= f.password_field :password, class: "form-control" %>
+          </div>
+
+          <%= f.submit "Sign in", class: "btn btn-primary w-100" %>
+        <% end %>
+        <br>
+        <%= link_to "Forgot password?", new_password_path %>
+      </div>
+    </div>
+  </div>
+</div>
