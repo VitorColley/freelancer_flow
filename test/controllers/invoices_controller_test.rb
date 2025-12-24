@@ -3,11 +3,17 @@ require "test_helper"
 class InvoicesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @invoice = invoices(:invoice_one)
+    @completed_invoice = invoices(:completed_project_invoice)
+
     @project = @invoice.project
+    @completed_project = @completed_invoice.project
+
+    @proposal = proposals(:completed_project_accepted_proposal)
 
     @freelancer = users(:freelancer_one)
     @other_freelancer = users(:freelancer_two)
     @client = users(:client_one)
+    @other_client = users(:client_two)
   end
 
   test "index is protected and redirects unauthenticated users to login" do
@@ -103,5 +109,69 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
 
     delete invoice_url(@invoice)
     assert_redirected_to project_path(@project)
+  end
+
+  test "client can view invoice for own project" do
+    sign_in_as @completed_project.client
+
+    get invoice_path(@completed_invoice)
+
+    assert_response :success
+  end
+
+  test "accepted freelancer can view invoice" do
+    sign_in_as @proposal.freelancer
+
+    get invoice_path(@completed_invoice)
+
+    assert_response :success
+  end
+  
+  test "other freelancer cannot view invoice" do
+    sign_in_as (@other_freelancer)
+
+    get invoice_path(@completed_invoice)
+
+    assert_redirected_to project_path(@completed_project)
+  end
+
+  test "other client cannot view invoice" do
+    sign_in_as (@other_client)
+
+    get invoice_path(@completed_invoice)
+
+    assert_redirected_to project_path(@completed_project)
+  end
+
+  test "accepted freelancer cannot initiate checkout" do
+    sign_in_as @proposal.freelancer
+
+    post checkout_invoice_path(@completed_invoice)
+
+    assert_redirected_to invoice_path(@completed_invoice)
+  end
+
+  test "other freelancer cannot initiate checkout" do
+    sign_in_as @other_freelancer
+
+    post checkout_invoice_path(@completed_invoice)
+
+    assert_redirected_to invoice_path(@completed_invoice)
+  end
+
+  test "other client cannot initiate checkout" do
+    sign_in_as @other_client
+
+    post checkout_invoice_path(@completed_invoice)
+
+    assert_redirected_to invoice_path(@completed_invoice)
+  end
+
+  test "checkout blocked if project is not completed" do
+    sign_in_as @project.client
+
+    post checkout_invoice_path(@invoice)
+
+    assert_redirected_to invoice_path(@invoice)
   end
 end

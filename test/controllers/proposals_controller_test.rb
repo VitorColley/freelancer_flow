@@ -27,7 +27,7 @@ class ProposalsControllerTest < ActionDispatch::IntegrationTest
   test "client cannot create proposal" do
     sign_in_as(@client)
 
-    post proposals_url, params: {
+    post project_proposals_path(@project), params: {
       proposal: {
         message: "Invalid proposal",
         bid_amount: 1000,

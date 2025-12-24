@@ -31,11 +31,6 @@ class InvoicesController < ApplicationController
     @project = Project.find(params[:invoice][:project_id])
     @invoice = @project.build_invoice(invoice_params)
 
-    # Assign parties automatically
-    @invoice.client = @project.client
-    @invoice.freelancer =
-      @project.proposals.find_by(status: "accepted")&.freelancer
-
     if @invoice.save
       redirect_to @invoice, notice: "Invoice was successfully created."
     else

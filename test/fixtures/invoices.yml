@@ -5,3 +5,9 @@ invoice_one:
   amount: 5000
   status: unpaid
   issued_at: <%= Time.current %>
+
+completed_project_invoice:
+  project: completed_project
+  amount: 1200
+  status: unpaid
+  issued_at: <%= 1.month.ago %>

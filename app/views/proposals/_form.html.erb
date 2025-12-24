@@ -2,29 +2,26 @@
   <div class="col-lg-8">
     <div class="card shadow-sm">
       <div class="card-body">
-        <%= form_with(model: proposal, class: "vstack gap-3") do |form| %>
+
+        <%= form_with(
+              model: [@project, proposal],
+              local: true,
+              class: "vstack gap-3"
+            ) do |form| %>
 
           <% if proposal.errors.any? %>
             <div class="alert alert-danger">
               <h6 class="alert-heading">
-                <%= pluralize(proposal.errors.count, "error") %> prevented this proposal from being saved:
+                <%= pluralize(proposal.errors.count, "error") %>
+                prevented this proposal from being saved:
               </h6>
               <ul class="mb-0">
-                <% proposal.errors.each do |error| %>
-                  <li><%= error.full_message %></li>
+                <% proposal.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
                 <% end %>
               </ul>
             </div>
           <% end %>
-
-          <!-- Project context (read-only, for clarity) -->
-          <div>
-            <label class="form-label">Project</label>
-            <input type="text"
-                   class="form-control"
-                   value="<%= @project.title %>"
-                   disabled>
-          </div>
 
           <div>
             <%= form.label :message, "Proposal message", class: "form-label" %>
@@ -36,14 +33,17 @@
 
           <div class="d-flex justify-content-between mt-3">
             <%= link_to "Cancel",
-                        project_path(@project),
+                        project_path(proposal.project),
                         class: "btn btn-link px-0" %>
 
-            <%= form.submit proposal.persisted? ? "Update proposal" : "Submit proposal",
-                  class: "btn btn-primary" %>
+            <%= form.submit(
+                  proposal.persisted? ? "Update proposal" : "Submit proposal",
+                  class: "btn btn-primary"
+                ) %>
           </div>
 
         <% end %>
+
       </div>
     </div>
   </div>

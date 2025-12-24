@@ -98,4 +98,64 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to projects_url
   end
+
+  test "accepted freelancer can complete project and invoice is generated" do
+    project = projects(:in_progress_project)
+    proposal = proposals(:accepted_proposal)
+
+    sign_in_as proposal.freelancer
+
+    assert_difference "Invoice.count", 1 do
+      patch complete_project_path(project)
+    end
+
+    project.reload
+
+    assert_equal "completed", project.status
+    assert project.invoice.present?
+    assert_equal project.budget, project.invoice.amount
+    assert_equal "unpaid", project.invoice.status
+  end
+
+  test "client cannot complete project" do
+    project = projects(:in_progress_project)
+
+    sign_in_as project.client
+
+    assert_no_difference "Invoice.count" do
+      patch complete_project_path(project)
+    end
+
+    assert_redirected_to project
+    assert_not_equal "completed", project.reload.status
+  end
+
+  test "non accepted freelancer cannot complete project" do
+    project = projects(:in_progress_project)
+    other_freelancer = users(:freelancer_two)
+
+    sign_in_as other_freelancer
+
+    assert_no_difference "Invoice.count" do
+      patch complete_project_path(project)
+    end
+
+    assert_redirected_to project
+    assert_not_equal "completed", project.reload.status
+  end
+
+  test "completing project twice does not create duplicate invoices" do
+    project = projects(:in_progress_project)
+    proposal = proposals(:accepted_proposal)
+
+    sign_in_as proposal.freelancer
+
+    assert_difference "Invoice.count", 1 do
+      patch complete_project_path(project)
+    end
+
+    assert_no_difference "Invoice.count" do
+      patch complete_project_path(project)
+    end
+  end
 end

@@ -21,3 +21,12 @@ accepted_mobile_app_proposal:
   bid_amount: 5000
   status: accepted
 
+accepted_proposal:
+  project: in_progress_project
+  freelancer: freelancer_one
+  status: "accepted"
+
+completed_project_accepted_proposal:
+  project: completed_project
+  freelancer: freelancer_one
+  status: accepted

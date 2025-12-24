@@ -6,6 +6,12 @@ client_one:
   role: client
   password_digest: <%= password_digest %>
 
+client_two:
+  name: Client Two
+  email_address: clienttwo@example.com
+  role: client
+  password_digest: <%= password_digest %>
+
 freelancer_one:
   name: Freelancer One
   email_address: freelancerone@example.com

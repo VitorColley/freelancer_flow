@@ -13,3 +13,18 @@ mobile_app_project:
   budget: 5000
   status: in_progress
   client: client_one
+
+in_progress_project:
+  title: "Test Project"
+  description: "In progress"
+  budget: 1200
+  status: "in_progress"
+  client: client_one
+
+completed_project:
+  title: "Completed Project"
+  description: "Done"
+  budget: 1200
+  status: completed
+  client: client_one
+

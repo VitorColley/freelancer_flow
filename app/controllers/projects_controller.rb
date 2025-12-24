@@ -105,11 +105,13 @@ class ProjectsController < ApplicationController
       project.update!(status: "completed")
 
       # Auto-generate invoice
-      Invoice.create!(
-        project: project,
-        amount: project.budget,
-        status: "unpaid"
-      )
+      unless project.invoice
+        Invoice.create!(
+          project: project,
+          amount: project.budget,
+          status: "unpaid"
+        )
+      end
     end
 
     redirect_to project, notice: "Project marked as completed. Invoice generated."

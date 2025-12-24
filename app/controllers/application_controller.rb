@@ -22,9 +22,8 @@ class ApplicationController < ActionController::Base
     # Only allows freelancers to execute certain actions
     def require_freelancer
       return if current_user&.freelancer?
-      redirect_back(
-        fallback_location: projects_path,
-        alert: "Only freelancers can perform this action."
-      )
+      
+      redirect_to projects_path,
+                  alert: "Only freelancers can submit proposals."
     end
 end
