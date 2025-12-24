@@ -1,6 +1,8 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  host = ENV.fetch("APP_HOST", "freelancerflow-i7ca.onrender.com")
+  Rails.application.routes.default_url_options[:host] = host
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -58,7 +60,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: host }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
