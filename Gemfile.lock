@@ -310,10 +310,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    solid_cache (1.0.10)
-      activejob (>= 7.2)
-      activerecord (>= 7.2)
-      railties (>= 7.2)
     sqlite3 (2.8.1-aarch64-linux-gnu)
     sqlite3 (2.8.1-aarch64-linux-musl)
     sqlite3 (2.8.1-arm-linux-gnu)
@@ -389,7 +385,6 @@ DEPENDENCIES
   rails (~> 8.1.1)
   rubocop-rails-omakase
   selenium-webdriver
-  solid_cache
   sqlite3 (>= 2.1)
   stimulus-rails
   stripe (~> 18.1)
