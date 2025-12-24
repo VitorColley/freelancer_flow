@@ -5,7 +5,8 @@ module Payments
             host = Rails.application.routes.default_url_options[:host]||ENV["APP_HOST"]
             raise "APP_HOST is not set" if host.blank?
 
-            Stripe::Checkout::Session.create(
+
+            session = Stripe::Checkout::Session.create(
                 payment_method_types: ['card'],
                 line_items: [{
                     price_data: {
